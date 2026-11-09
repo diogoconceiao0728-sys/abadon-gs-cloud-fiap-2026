@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Abadon Cloud - REST API",
+    "version": "1.0.0",
+    "description": "Global Solution FIAP 2026: gerenciamento de incidentes, SQLite/libSQL na nuvem."
+  },
+  "servers": [
+    {
+      "url": "https://abadonsayhello-ai.vercel.app"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
+      }
+    },
+    "schemas": {
+      "Incident": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 160
+          },
+          "description": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3000
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high",
+              "critical"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "open",
+              "investigating",
+              "resolved"
+            ]
+          },
+          "source": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/health": {
+      "get": {
+        "summary": "Saúde da API e conectividade com Turso",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "503": {
+            "description": "Indisponível"
+          }
+        }
+      }
+    },
+    "/api/incidents": {
+      "get": {
+        "summary": "Listagem paginada",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "open",
+                "investigating",
+                "resolved"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar incidente",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Incident"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Criado"
+          },
+          "401": {
+            "description": "Sem autorização"
+          }
+        }
+      }
+    },
+    "/api/incidents/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "get": {
+        "summary": "Consultar um incidente",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Não encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Atualizar",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atualizado"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      },
+      "patch": {
+        "summary": "Atualização parcial",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Atualizado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Excluir",
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excluído"
+          },
+          "401": {
+            "description": "Não autorizado"
+          }
+        }
+      }
+    },
+    "/api/stats": {
+      "get": {
+        "summary": "Estatísticas agregadas",
+        "responses": {
+          "200": {
+            "description": "Totais por status e severidade"
+          }
+        }
+      }
+    }
+  }
+}
