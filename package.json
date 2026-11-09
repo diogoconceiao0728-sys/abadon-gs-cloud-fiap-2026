@@ -1,0 +1,1 @@
+{"name":"abadon-ai","version":"4.2.1","private":true,"type":"module","dependencies":{"docx":"9.5.1","@libsql/client":"^0.15.0"},"engines":{"node":">=22"}}
