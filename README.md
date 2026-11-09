@@ -48,9 +48,9 @@ O projeto **não utiliza VM própria**; por isso, SKU de máquina virtual não s
 
 ## Estado da recuperação e validação (09/11/2026)
 
-O **frontend público completo** foi sincronizado diretamente da versão publicada na Vercel, incluindo páginas HTML, CSS, JavaScript, biblioteca de estudos e OpenAPI. As rotas principais de API recuperadas também estão presentes. Porém, os módulos privados `lib/db.js`, `lib/core.js` e `lib/common.js`, além de algumas rotas de IA, **ainda não foram integralmente recuperados**; por isso, este repositório ainda não é autossuficiente para novo deploy. A produção não foi alterada.
+O **frontend público completo** foi sincronizado a partir do site publicado. Os módulos privados `lib/db.js`, `lib/core.js`, `lib/common.js` e as rotas dos agentes foram **reconstruídos**, pois o conector não disponibilizou a íntegra dos arquivos originais. As rotas básicas do backend foram compiladas e executadas em um novo deployment de preview, sem modificar a produção. Os agentes de IA reconstruídos ainda exigem teste de regressão próprio.
 
-O deployment estava `READY`. Testes HTTP reais em 09/11/2026 confirmaram `GET /api/health` (200, Turso conectado), `GET /api/incidents` (200), `GET /api/stats` (200), e `GET /api/incidents/999999` (404). Requisições POST/PATCH/DELETE **sem** `x-api-key` retornaram 401, confirmando proteção de escrita, não CRUD autenticado. Veja `docs/evidencias/testes-http-2026-11-09.md`. Agentes de IA, escrita autenticada e capturas visuais ainda precisam de comprovação.
+O deployment de produção está `READY`. Testes HTTP reais em 09/11/2026 confirmaram `GET /api/health` (200, Turso conectado), listagem e estatísticas (200), e registro inexistente (404). POST/PATCH/DELETE sem credencial retornaram 401. **O CRUD autenticado foi aprovado em deployment de preview**: POST 201, GET 200, PATCH 200, GET atualizado 200, DELETE 200, GET final 404. O registro de teste foi removido. Detalhes em `docs/evidencias/teste-crud-autenticado-2026-11-09.md`. A produção não foi alterada. Os agentes de IA ainda requerem regressão e o painel administrativo Turso exige captura autenticada.
 
 ## Entrega acadêmica
 
@@ -60,3 +60,8 @@ O deployment estava `READY`. Testes HTTP reais em 09/11/2026 confirmaram `GET /a
 - A entrega completa exige sincronizar os arquivos faltantes, validar as rotas em produção e anexar capturas reais.
 
 Consulte também `docs/roteiro-de-testes.md` e `docs/schema-referencia.sql`.
+
+
+## Teste de CRUD autenticado (09/11/2026)
+
+Resultado **APROVADO**, em preview Vercel utilizando as variáveis protegidas de ambiente e Turso/libSQL, sem publicar a chave `GS_API_KEY`. O fluxo completo foi POST → GET → PATCH → GET → DELETE → GET 404. Consulte as [evidências registradas](docs/evidencias/teste-crud-autenticado-2026-11-09.md).
