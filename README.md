@@ -40,7 +40,7 @@ O projeto **não utiliza VM própria**; por isso, SKU de máquina virtual não s
 ## Variáveis de ambiente
 
 - `TURSO_DATABASE_URL`
-- `TURSO_AUTH_TOKEN`
+- `TURSO_AUTH_TOKEN`\n- `GS_API_KEY` (cabeçalho `x-api-key` para operações de escrita)
 - `GROQ_API_KEY`, `GEMINI_API_KEY` (quando os respectivos agentes estiverem configurados)
 - `FREE_TIER_CONFIRMED` (sinalizador de configuração)
 
@@ -48,9 +48,9 @@ O projeto **não utiliza VM própria**; por isso, SKU de máquina virtual não s
 
 ## Estado da recuperação e validação (09/11/2026)
 
-Este repositório possui **cópia parcial** de arquivos verificados no deployment da Vercel. O conector limitou a leitura de alguns arquivos maiores (`lib/db.js`, `lib/core.js`, `lib/common.js`, páginas e scripts do frontend). Esses arquivos **não devem ser tratados como recuperados**. A aplicação publicada na Vercel foi preservada, sem alterações.
+O **frontend público completo** foi sincronizado diretamente da versão publicada na Vercel, incluindo páginas HTML, CSS, JavaScript, biblioteca de estudos e OpenAPI. As rotas principais de API recuperadas também estão presentes. Porém, os módulos privados `lib/db.js`, `lib/core.js` e `lib/common.js`, além de algumas rotas de IA, **ainda não foram integralmente recuperados**; por isso, este repositório ainda não é autossuficiente para novo deploy. A produção não foi alterada.
 
-O deployment foi identificado como `READY`, mas **não foi possível executar/confirmar os testes HTTP de produção** nesta revisão. Portanto, banco, agentes e operações CRUD ainda requerem teste integrado e prints reais.
+O deployment estava `READY`. Testes HTTP reais em 09/11/2026 confirmaram `GET /api/health` (200, Turso conectado), `GET /api/incidents` (200), `GET /api/stats` (200), e `GET /api/incidents/999999` (404). Requisições POST/PATCH/DELETE **sem** `x-api-key` retornaram 401, confirmando proteção de escrita, não CRUD autenticado. Veja `docs/evidencias/testes-http-2026-11-09.md`. Agentes de IA, escrita autenticada e capturas visuais ainda precisam de comprovação.
 
 ## Entrega acadêmica
 
