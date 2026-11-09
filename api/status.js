@@ -1,0 +1,1 @@
+export default function handler(req,res){res.setHeader('Cache-Control','no-store');if(req.method!=='GET')return res.status(405).end();res.json({backend:'online',agents:{research:{name:'Qwen',configured:!!process.env.GROQ_API_KEY},report:{name:'Gemini',configured:!!process.env.GEMINI_API_KEY}},freeTierConfirmed:process.env.FREE_TIER_CONFIRMED==='true',policy:'no-paid-fallback'});}
