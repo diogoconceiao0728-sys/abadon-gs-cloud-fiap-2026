@@ -47,3 +47,17 @@ Confirma tratamento de registro inexistente.
 - **Confirmado:** Vercel acessível, APIs GET respondendo, consulta SQL e leitura do Turso.
 - **Ainda não validado:** POST, PUT/PATCH e DELETE (métodos de escrita protegidos); inferência real dos provedores de IA.
 - Para evidências gráficas, capturar esses endpoints no navegador/cliente HTTP sem expor credenciais.
+
+
+## Testes adicionais de métodos de escrita — 09/11/2026
+
+Execução real em ambiente isolado de teste, enviando requisições HTTP ao domínio de produção:
+
+| Método | Rota | HTTP observado | Resposta |
+|---|---|---|---|
+| POST | `/api/incidents` | **401** | `{"error":"Unauthorized"}` |
+| PATCH | `/api/incidents/999999` | **401** | `{"error":"Unauthorized"}` |
+| DELETE | `/api/incidents/999999` | **401** | `{"error":"Unauthorized"}` |
+| GET | `/api/health` | **200** | `{"status":"ok","database":"turso","tables":"initialized","incident_count":0}` |
+
+**Conclusão:** os métodos de escrita rejeitam corretamente requisições sem a chave `x-api-key`. O método `write()` do backend exige `GS_API_KEY`. A variável de produção está cadastrada como segredo na Vercel e não foi revelada pelo conector; portanto, o teste autorizado de criação, atualização e exclusão ainda não pôde ser executado. Nenhum registro foi modificado. Não apresentar os códigos 401 como sucesso do CRUD; eles validam somente o controle de acesso.
