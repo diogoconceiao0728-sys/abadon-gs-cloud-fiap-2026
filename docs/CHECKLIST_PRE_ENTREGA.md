@@ -12,11 +12,11 @@
 - [x] Respostas reais documentadas em docs/evidencias/testes-http-2026-11-09.md
 
 ## Pendências obrigatórias
-- [ ] Recuperar/reconstruir lib/db.js, lib/common.js, lib/core.js e as rotas de IA ausentes.
-- [ ] Fazer instalação limpa e deploy a partir do GitHub, antes de mudar a produção.
-- [ ] Testar POST → GET → PATCH → GET → DELETE → GET 404 usando a chave GS_API_KEY de forma segura, sem expor segredos.
-- [ ] Capturar prints reais do site, Vercel READY, API, CRUD autenticado e Turso.
-- [ ] Inserir os prints reais no PDF com datas/legendas.
+- [x] Reconstruir lib/db.js, lib/common.js, lib/core.js e as rotas de IA ausentes. O backend CRUD passou por deployment de preview; agentes de IA ainda precisam de regressão.
+- [ ] Fazer deploy integral automatizado a partir do repositório GitHub (o deploy GitSource falhou com git_info_fail; alternativa de upload direto da API principal foi testada com sucesso).
+- [x] Testar POST → GET → PATCH → GET → DELETE → GET 404 com autenticação x-api-key em preview, sem expor segredo. Resultado: 201 → 200 → 200 → 200 → 200 → 404; registro removido.
+- [ ] Anexar prints reais do painel Turso/Vercel à documentação final. As respostas HTTP estão salvas em Markdown e o site foi verificado via navegador.
+- [ ] Inserir capturas reais, após obtenção dos arquivos de imagem, no relatório acadêmico; não substituir por imagens simuladas.
 
 ## Melhorias opcionais
 - [ ] Expandir OpenAPI para rotas auxiliares /api/status e /api/report.
@@ -28,3 +28,6 @@
 - HTTP 200 de health comprova consulta SQL, não escrita.
 - HTTP 401 comprova bloqueio de acesso, não CRUD funcional.
 - Logs JSON textuais não substituem os prints exigidos no enunciado.
+## Evidência do CRUD autenticado
+
+Veja `docs/evidencias/teste-crud-autenticado-2026-11-09.md`: execução real 09/11/2026, deployment de preview READY, banco Turso conectado e exclusão confirmada.
